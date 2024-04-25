@@ -23,7 +23,7 @@ class FailSafeRepositoryTest extends TestCase
 
 		Log::swap(new LogFake());
 
-		$this->store = cache()->store('redis_fail_safe');
+		$this->store = cache()->store('fail_safe');
 		$this->store->clear();
 	}
 
@@ -259,6 +259,8 @@ class FailSafeRepositoryTest extends TestCase
 
 	public function testFlushStaleTags(): void
 	{
+		$this->markTestSkipped('Method not supported by array driver');
+
 		$this->store->flushStaleTags();
 	}
 

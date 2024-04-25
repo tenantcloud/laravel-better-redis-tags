@@ -4,21 +4,13 @@ on: [push, pull_request]
 
 jobs:
     phpunit:
-        name: PHPUnit on PHP v${{ matrix.php }} & TestBench ${{ matrix.test-bench }} & Redis client ${{ matrix.redis-client }}
+        name: PHPUnit on PHP v${{ matrix.php }} & TestBench ${{ matrix.test-bench }}
         runs-on: ubuntu-latest
         strategy:
             fail-fast: true
             matrix:
                 php: [ 8.1, 8.2 ]
                 test-bench: [ ^8.15 ]
-                redis-client: [predis, phpredis]
-
-        services:
-            redis:
-                image: redis:7.0
-                ports:
-                    - 6379/tcp
-                options: --entrypoint redis-server
 
         steps:
             -   name: Checkout code
@@ -28,7 +20,6 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    extensions: redis
                     tools: composer:v2
                     coverage: none
 
@@ -51,10 +42,6 @@ jobs:
 
             -   name: Execute phpunit
                 run: composer test -- --colors=always
-                env:
-                    REDIS_CLIENT: ${{ matrix.redis-client }}
-                    REDIS_HOST: localhost
-                    REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
 
     php-cs-fixer:
         name: php-cs-fixer

@@ -22,7 +22,7 @@ class FailingFailSafeRepositoryTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->store = cache()->store('failing_redis_fail_safe');
+		$this->store = cache()->store('failing_fail_safe');
 	}
 
 	public function testHas(): void
